@@ -60,6 +60,8 @@ dependencies:
   webview_flutter: ^4.7.0
   android_path_provider: ^0.3.0
   flutter_phone_direct_caller: ^2.1.1
+  flutter_rating_bar: ^4.0.1
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:

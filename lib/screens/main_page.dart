@@ -1,9 +1,8 @@
-
-import 'package:code0/pages/home_page.dart';
-import 'package:code0/pages/report/report_progress.dart';
-import 'package:code0/pages/report_page.dart';
-import 'package:code0/pages/settings_page.dart';
+import 'package:code0/map/map.dart';
+import 'package:code0/pages/home/home_page.dart';
+import 'package:code0/screens/settings_page.dart';
 import 'package:flutter/material.dart';
+
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class MainPage extends StatefulWidget {
@@ -24,13 +23,13 @@ class _MainPageState extends State<MainPage> {
     ),
     const GButton(
       icon: Icons.file_copy_sharp,
-      text: 'Report',
+      text: 'Map',
       iconActiveColor: Colors.white,
       textColor: Colors.white,
     ),
     const GButton(
       icon: Icons.history_edu_rounded,
-      text: 'History',
+      text: 'DashBoard',
       iconActiveColor: Colors.white,
       textColor: Colors.white,
     ),
@@ -45,12 +44,13 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: const Color(0xFFEFF2F9),
         body: selectedIndex == 0
             ? const HomePage()
             : selectedIndex == 1
-                ? const ReportPage()
+                ? const MapPage()
                 : selectedIndex == 2
-                    ? const ReportProgress()
+                    ? const SizedBox()
                     // const HistoryPage()
                     : const SettingsPage(),
         bottomNavigationBar: Container(

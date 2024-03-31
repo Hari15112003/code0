@@ -1,4 +1,4 @@
-import 'package:code0/pages/main_page.dart';
+import 'package:code0/screens/main_page.dart';
 import 'package:code0/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:country_picker/country_picker.dart';

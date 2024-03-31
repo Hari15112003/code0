@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -34,19 +33,13 @@ class _MapPageState extends State<MapPage> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://flutter.dev'));
+      ..loadRequest(Uri.parse('https://www.google.com/maps'));
   }
 
   @override
   Widget build(BuildContext context) {
     return WebViewWidget(
       controller: _controller,
-      // initialUrl:
-      //     'https://www.google.com/maps', // Set the URL of the Google Maps web page
-      // javascriptMode: JavascriptMode.unrestricted,
-      // onWebViewCreated: (WebViewController webViewController) {
-      //   _controller.complete(webViewController);
-      // },
     );
   }
 }

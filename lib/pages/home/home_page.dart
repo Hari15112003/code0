@@ -1,12 +1,12 @@
 import 'package:code0/api/act_api.dart';
-import 'package:code0/pages/home/links/link_navigate.dart';
+import 'package:code0/pages/home/cases/case_history.dart';
+import 'package:code0/pages/home/emergency/emergency_alert.dart';
+import 'package:code0/pages/home/news/news_page.dart';
+import 'package:code0/pages/home/volunteer/volunteer_availabity.dart';
+import 'package:code0/pages/report/file_case.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-import 'home/news/components/custom_list_tile.dart';
-import 'home/news/model/article_model.dart';
-import 'home/news/services/api_service.dart';
+import 'news/services/api_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,7 +30,6 @@ class _HomePageState extends State<HomePage> {
   String crimeType = "Theft";
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -58,100 +57,119 @@ class _HomePageState extends State<HomePage> {
             headText(text: "Complaint Status"),
             Container(
               width: double.infinity,
-              height: 330,
-              padding: EdgeInsets.all(10),
+              height: 350,
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Color.fromARGB(255, 185, 184, 184).withOpacity(.2),
+                color: Colors.white,
               ),
-              child: Column(children: [
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color.fromARGB(255, 113, 213, 252),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          helperLinks(
-                              icon: Icons.sos,
-                              color: Colors.red,
-                              text: "Emergency\n     Alert",
-                              function: () {}),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          helperLinks(
-                              icon: Icons.contact_emergency_rounded,
-                              color: Colors.orange,
-                              text: "Emergency\n  Contacts",
-                              function: () {}),
-                        ],
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      height: 50,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color.fromARGB(255, 52, 181, 233),
                       ),
-                      Column(
+                      child: const Text(
+                        "Easy Navigators",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             helperLinks(
-                                icon: Icons.sos,
-                                color: Color.fromARGB(255, 122, 211, 27),
-                                text: "Emergency",
-                                function: () {}),
-                            SizedBox(
+                              icon: Icons.sos,
+                              color: Colors.red,
+                              text: "Emergency\n     Alert",
+                              navigatorWidget: const EmergencyAlert(),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            helperLinks(
+                                icon: Icons.newspaper,
+                                color: Colors.orange,
+                                text: "     News \n Information",
+                                navigatorWidget: const NewsScreen()),
+                          ],
+                        ),
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              helperLinks(
+                                  icon: Icons.sos,
+                                  color:
+                                      const Color.fromARGB(255, 122, 211, 27),
+                                  text: "Prevention \n     Tips",
+                                  navigatorWidget: const SizedBox()),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              helperLinks(
+                                  icon: Icons.contact_emergency_rounded,
+                                  color: const Color.fromARGB(255, 180, 8, 160),
+                                  text: "Emergency\n  Contacts",
+                                  navigatorWidget: const SizedBox()),
+                            ]),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            helperLinks(
+                                icon: Icons.history,
+                                color: const Color.fromARGB(255, 15, 172, 229),
+                                text: "  Volunteers",
+                                navigatorWidget: const VolunteerAvailability()),
+                            const SizedBox(
                               height: 35,
                             ),
                             helperLinks(
-                                icon: Icons.contact_emergency_rounded,
-                                color: Color.fromARGB(255, 180, 8, 160),
-                                text: "Emergency\n  Contacts",
-                                function: () {}),
-                          ]),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          helperLinks(
-                              icon: Icons.history,
-                              color: Color.fromARGB(255, 15, 172, 229),
-                              text: "  Volunteers",
-                              function: () {}),
-                          SizedBox(
-                            height: 35,
-                          ),
-                          helperLinks(
                               icon: Icons.report,
                               color: Colors.green,
                               text: "  File\n Case",
-                              function: () {}),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          helperLinks(
+                              navigatorWidget: const FileCase(),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            helperLinks(
                               icon: Icons.history,
                               color: Colors.purple,
                               text: "  Case\nHistory",
-                              function: () {}),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          helperLinks(
+                              navigatorWidget: const CaseHistory(),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            helperLinks(
                               icon: Icons.notification_important,
-                              color: Color.fromARGB(255, 62, 7, 245),
+                              color: const Color.fromARGB(255, 62, 7, 245),
                               text: "  Emergency\n Notification",
-                              function: () {}),
-                        ],
-                      ),
-                    ],
+                              navigatorWidget: const SizedBox(),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ]),
+                ],
+              ),
             ),
 
             // Padding(
@@ -234,36 +252,6 @@ class _HomePageState extends State<HomePage> {
             //     ),
             //   ),
             // ),
-            headText(text: "News"),
-            SizedBox(
-              height: 100,
-              child: NavigateLink(),
-            ),
-            SizedBox(
-              height: 500,
-              child: FutureBuilder(
-                future: client.getArticle(),
-                builder: (BuildContext context, snapshot) {
-                  //let's check if we got a response or not
-
-                  if (snapshot.hasData) {
-                    //Now let's make a list of articles
-                    List<Article> articles = snapshot.data!;
-                    return ListView.builder(
-                      //Now let's create our custom List tile
-                      itemCount: articles.length,
-                      itemBuilder: (context, index) =>
-                          customListTile(articles[index], context),
-                    );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.blue,
-                    ),
-                  );
-                },
-              ),
-            ),
           ],
         ),
       ),
@@ -274,13 +262,18 @@ class _HomePageState extends State<HomePage> {
       {required IconData icon,
       required Color color,
       required String text,
-      required VoidCallback function}) {
+      required Widget navigatorWidget}) {
     return GestureDetector(
-      onTap: function,
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => navigatorWidget));
+      },
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(8),
+            height: 50,
+            width: 50,
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: color.withOpacity(.2),
               shape: BoxShape.circle,
@@ -291,7 +284,7 @@ class _HomePageState extends State<HomePage> {
               size: 30,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(text)

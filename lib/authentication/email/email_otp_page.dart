@@ -102,15 +102,16 @@ class _EmailOtpPageState extends State<EmailOtpPage> {
                 ),
               ),
               CustomButton(
-                  text: "Proceed",
-                  function: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RegisterScreen(),
-                      ),
-                    );
-                  })
+                text: "Proceed",
+                function: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterScreen(),
+                    ),
+                  );
+                },
+              )
             ],
           ),
         ),

@@ -5,8 +5,11 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final String labelText;
+  final bool? readyOnly;
+
   const CustomTextField(
       {super.key,
+      this.readyOnly,
       required this.iconData,
       required this.hintText,
       required this.controller,
@@ -16,6 +19,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      readOnly: readyOnly ?? false,
       keyboardType:
           labelText == "Otp" ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
