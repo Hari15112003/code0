@@ -18,15 +18,16 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         minimumSize: const Size(300, 50),
-        backgroundColor: text == "Login" || text == "Register"
-            ? const Color.fromARGB(255, 68, 33, 243).withOpacity(0.9)
-            : Colors.white,
+        backgroundColor:
+            text == "Login" || text == "Register" || text == "Send Otp"
+                ? const Color.fromARGB(255, 68, 33, 243).withOpacity(0.9)
+                : Colors.white,
       ),
       onPressed: function,
       child: Text(
         text,
         style: TextStyle(
-            color: text == "Login" || text == "Register"
+            color: text == "Login" || text == "Register" || text == "Send Otp"
                 ? Colors.white
                 : Colors.black,
             fontSize: 18),

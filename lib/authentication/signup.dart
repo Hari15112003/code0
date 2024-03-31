@@ -1,4 +1,4 @@
-import 'package:code0/authentication/forget_pass.dart';
+import 'package:code0/authentication/email/email_otp_page.dart';
 import 'package:code0/utils/custom_button.dart';
 import 'package:code0/utils/text_form.dart';
 import 'package:flutter/material.dart';
@@ -162,7 +162,16 @@ class _SignUpState extends State<SignUp> {
               ),
               CustomButton(
                 text: 'Register',
-                function: () {},
+                function: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EmailOtpPage(
+                        email: emailController.text.trim(),
+                      ),
+                    ),
+                  );
+                },
               ),
               const Padding(
                 padding: EdgeInsets.all(20),
@@ -195,10 +204,7 @@ class _SignUpState extends State<SignUp> {
               CustomButton(
                 text: 'Signin',
                 function: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ForgetPassword()));
+                  Navigator.pop(context);
                 },
               ),
               SizedBox(

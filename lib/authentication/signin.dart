@@ -1,6 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:code0/authentication/email/email_otp_page.dart';
 import 'package:code0/authentication/signup.dart';
 import 'package:code0/utils/custom_button.dart';
+import 'package:code0/utils/snackbar.dart';
 import 'package:code0/utils/text_form.dart';
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -16,7 +21,7 @@ class _SignInState extends State<SignIn> {
   TextEditingController passwordController = TextEditingController();
 
   bool isChecked = false;
-
+  EmailOTP myauth = EmailOTP();
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -46,14 +51,14 @@ class _SignInState extends State<SignIn> {
                     hintText: "123@gmail.com",
                     controller: emailController),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: CustomTextField(
-                    labelText: "Password",
-                    iconData: Icons.remove_red_eye,
-                    hintText: "123...",
-                    controller: passwordController),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(20),
+              //   child: CustomTextField(
+              //       labelText: "Otp",
+              //       iconData: Icons.remove_red_eye,
+              //       hintText: "123...",
+              //       controller: passwordController),
+              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -89,7 +94,30 @@ class _SignInState extends State<SignIn> {
               SizedBox(
                 height: height * 0.03,
               ),
-              CustomButton(text: "Login", function: () {}),
+              CustomButton(
+                text: "Send Otp",
+                function: () async {
+                  myauth.setConfig(
+                      appEmail: "sit21cs123@sairamtap.edu.in",
+                      appName: "Code0",
+                      userEmail: emailController.text.trim(),
+                      otpLength: 4,
+                      otpType: OTPType.digitsOnly);
+                  if (await myauth.sendOTP() == true) {
+                    showSnackBar(context, "OTP has been sent");
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EmailOtpPage(
+                          email: emailController.text.trim(),
+                        ),
+                      ),
+                    );
+                  } else {
+                    showSnackBar(context, 'Oops, OTP send failed');
+                  }
+                },
+              ),
               SizedBox(
                 height: height * 0.03,
               ),

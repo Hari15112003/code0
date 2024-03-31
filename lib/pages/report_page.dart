@@ -45,7 +45,6 @@ class _ReportPageState extends State<ReportPage> {
   TextEditingController dressCodeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
       child: Column(

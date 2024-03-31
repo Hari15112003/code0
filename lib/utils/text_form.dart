@@ -16,7 +16,8 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      // keyboardType: ,
+      keyboardType:
+          labelText == "Otp" ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
         // floatingLabelStyle:
         //     MaterialStateTextStyle.resolveWith((states) => null),
