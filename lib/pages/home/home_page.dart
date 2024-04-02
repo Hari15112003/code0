@@ -57,7 +57,9 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
-            headText(text: "Safe Zone"),
+            const SizedBox(
+              height: 10,
+            ),
             SizedBox(
               height: 200,
               child: CarouselSlider(
@@ -86,12 +88,59 @@ class _HomePageState extends State<HomePage> {
                   items: [
                     Container(
                       alignment: Alignment.center,
-                      padding: const EdgeInsets.all(10),
                       height: 100,
                       decoration: BoxDecoration(
+                        image: const DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                              "assets/images/carosel1.jpg",
+                            )),
                         borderRadius: BorderRadius.circular(25),
                         gradient: const LinearGradient(
-                          colors: [Color(0xff92A3FD), Color(0xff9DCEFF)],
+                          colors: [
+                            Color(0xff92A3FD),
+                            Color(0xff9DCEFF),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                              "assets/images/carosel2.jpg",
+                            )),
+                        borderRadius: BorderRadius.circular(25),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xff92A3FD),
+                            Color(0xff9DCEFF),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                              "assets/images/carosel3.jpg",
+                            )),
+                        borderRadius: BorderRadius.circular(25),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xff92A3FD),
+                            Color(0xff9DCEFF),
+                          ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),

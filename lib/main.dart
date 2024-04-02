@@ -17,7 +17,8 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var initScreen = prefs.getInt("initScreen");
-  await prefs.setInt("initScreen", 1);
+  await prefs.setInt("initScreen", 0);
+
   runApp(
     MyApp(initScreen: initScreen),
   );

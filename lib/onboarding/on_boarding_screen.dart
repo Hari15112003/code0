@@ -18,27 +18,6 @@ class _OnboardingScreen extends State<OnboardingScreen> {
   int page = 0;
   late LiquidController liquidController;
 
-  final List<Map<String, String>> splashData = [
-    {
-      "title": "Explore Wiko\nBoarding",
-      "subtitle":
-          "Gratitude is the most heartwarming\nfeeling. Praise someone in the\neasiest way possible",
-      "image": "assets/images/boarding1.png"
-    },
-    {
-      "title": "Get Experience",
-      "subtitle":
-          "Browse kudos list. See what your\ncommunity is up to and\nget inspired",
-      "image": "assets/images/boarding2.png"
-    },
-    {
-      "title": "Application\nMedia",
-      "subtitle":
-          "Do your best in your day to day life\nand unlock achievements",
-      "image": "assets/images/boarding3.png"
-    },
-  ];
-
   @override
   void initState() {
     liquidController = LiquidController();
@@ -70,6 +49,26 @@ class _OnboardingScreen extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, String>> splashData = [
+      {
+        "title": "Ensuring Safety,\nFostering Unity",
+        "subtitle":
+            "Welcome to JusticeX, where fairness and equity thrive. Join us in ensuring justice for all.",
+        "image": "assets/images/boarding1.jpg"
+      },
+      {
+        "title": "Building Trust Through Action",
+        "subtitle":
+            "Enter JusticeX, where fairness prevails. Together, let's ensure equity in every case.",
+        "image": "assets/images/boarding2.jpg"
+      },
+      {
+        "title": "Application\nMedia",
+        "subtitle":
+            "Step into JusticeX, where equity is our priority. Join us in promoting fairness.",
+        "image": "assets/images/boarding3.jpg",
+      },
+    ];
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -108,14 +107,17 @@ class _OnboardingScreen extends State<OnboardingScreen> {
                         ),
                         Visibility(
                           visible: index == page,
-                          child: Text(
-                            splashData[index]['subtitle']!,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: "Sofia",
-                              fontSize: 15,
-                              color: Colors.grey[600],
-                              height: 1.5,
+                          child: SizedBox(
+                            width: 380,
+                            child: Text(
+                              splashData[index]['subtitle']!,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: "Sofia",
+                                fontSize: 15,
+                                color: Colors.grey[600],
+                                height: 1.5,
+                              ),
                             ),
                           ),
                         ),

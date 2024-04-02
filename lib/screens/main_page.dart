@@ -1,7 +1,6 @@
 import 'package:code0/map/map.dart';
 import 'package:code0/pages/home/home_page.dart';
 import 'package:code0/screens/dashboard.dart';
-import 'package:code0/screens/settings_page.dart';
 import 'package:code0/settings/account_screen.dart';
 import 'package:flutter/material.dart';
 

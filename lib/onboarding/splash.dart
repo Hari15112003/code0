@@ -11,39 +11,39 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  // late final AnimationController _controller =
-  //     AnimationController(duration: const Duration(seconds: 3), vsync: this)
-  //       ..repeat(reverse: false);
-  // late final Animation<double> _animation =
-  //     CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
   @override
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(seconds: 3)).then((value) => {
+    Future.delayed(const Duration(seconds: 5)).then((value) => {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const MainPage()),
+            MaterialPageRoute(
+              builder: (context) => const MainPage(),
+            ),
           )
         });
   }
 
   @override
   Widget build(BuildContext context) {
-    var hei = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Column(
         children: [
+          const SizedBox(
+            height: 210,
+          ),
           Center(
-            child: Image.asset('assets/images/removed_logo.png'),
+            child: Image.asset(
+              'assets/images/removed_logo.png',
+            ),
           ),
-          SizedBox(
-            height: hei * 0.36,
-          ),
-          const SpinKitFadingFour(
-            color: Color.fromARGB(255, 23, 125, 153),
-            size: 25,
+          const Expanded(
+            child: SpinKitFadingFour(
+              color: Color.fromARGB(255, 23, 125, 153),
+              size: 25,
+            ),
           )
         ],
       ),

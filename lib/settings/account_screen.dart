@@ -6,9 +6,7 @@ import 'package:code0/authentication/signin.dart';
 import 'package:code0/settings/setting_item.dart';
 import 'package:code0/utils/top_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -64,7 +62,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              color: Color.fromARGB(255, 55, 125, 210)
+                              color: const Color.fromARGB(255, 55, 125, 210)
                                   .withOpacity(.7),
                             ),
                             width: wid,
@@ -100,16 +98,16 @@ class _AccountScreenState extends State<AccountScreen> {
                                     children: [
                                       Text(
                                         dob,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text(
+                                      const Text(
                                         "-",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text(
+                                      const Text(
                                         "20 Yrs",
                                         style: TextStyle(
                                             color: Colors.black,
@@ -118,7 +116,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Container(

@@ -1,13 +1,12 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:code0/pages/case_filling/step2_casefile.dart';
 import 'package:code0/utils/snackbar.dart';
 import 'package:code0/utils/text_form.dart';
 import 'package:code0/utils/top_button.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import 'step1_casefile.dart';
 
 class FileCase extends StatefulWidget {
   const FileCase({super.key});
@@ -105,6 +104,7 @@ class _StepperExampleState extends State<StepperExample> with RestorationMixin {
     super.initState();
   }
 
+  @override
   String? get restorationId => widget.restorationId;
   String dateChoosen = "Pick date";
   final RestorableDateTime _selectedDate =
@@ -233,13 +233,13 @@ class _StepperExampleState extends State<StepperExample> with RestorationMixin {
         }
       },
       onStepContinue: () {
+        if (_index == 1) {
+          fileCaseRegister();
+        }
         if (_index <= 0) {
           setState(() {
             _index += 1;
           });
-        }
-        if (_index == 1) {
-          fileCaseRegister();
         }
       },
       onStepTapped: (int index) {
@@ -249,7 +249,7 @@ class _StepperExampleState extends State<StepperExample> with RestorationMixin {
       },
       steps: <Step>[
         Step(
-            title: Text('Step 1: Important Details'),
+            title: const Text('Step 1: Important Details'),
             content: Padding(
                 padding: const EdgeInsets.all(10),
                 child: SingleChildScrollView(
@@ -362,7 +362,7 @@ class _StepperExampleState extends State<StepperExample> with RestorationMixin {
                   ),
                 ))),
         Step(
-            title: Text('Step 2: General Details'),
+            title: const Text('Step 2: General Details'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -472,7 +472,6 @@ class _StepperExampleState extends State<StepperExample> with RestorationMixin {
   }
 
   void fileCaseRegister() async {
-    
     String date =
         ("${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year}");
     if (incidentValue.isNotEmpty &&
@@ -492,22 +491,26 @@ class _StepperExampleState extends State<StepperExample> with RestorationMixin {
           .collection(date)
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .set({
-        time: {
-          "incident": incidentValue,
-          "country": countryValue,
-          "state": stateValue,
-          "city": cityValue,
-          "area": areaController.text.trim(),
-          "dressCode": dressCodeController.text.trim(),
-          "weapon": weaponController.text.trim(),
-          "timeFrom": "${timeFrom.hour}:${timeTo.minute}",
-          "timeTo": "${timeTo.hour}:${timeTo.minute}",
-          "dateFrom": fromDate,
-          "dateTo": toDate,
-          "gender": genderValue,
-          "description": descriptionController.text.trim(),
-        },
-      }).onError((error, stackTrace) => print(error));
+            time: {
+              "incident": incidentValue,
+              "country": countryValue,
+              "state": stateValue,
+              "city": cityValue,
+              "area": areaController.text.trim(),
+              "dressCode": dressCodeController.text.trim(),
+              "weapon": weaponController.text.trim(),
+              "timeFrom": "${timeFrom.hour}:${timeTo.minute}",
+              "timeTo": "${timeTo.hour}:${timeTo.minute}",
+              "dateFrom": fromDate,
+              "dateTo": toDate,
+              "gender": genderValue,
+              "description": descriptionController.text.trim(),
+            },
+          })
+          .then((value) => showSnackBar(
+              context: context, content: "File registered Successfully"))
+          .onError((error, stackTrace) => print(error));
+      print("Error");
     } else {
       showSnackBar(context: context, content: "Enter all Fields");
     }
