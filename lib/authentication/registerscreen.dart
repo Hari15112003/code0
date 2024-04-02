@@ -1,4 +1,3 @@
-import 'package:code0/screens/main_page.dart';
 import 'package:code0/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:country_picker/country_picker.dart';
@@ -8,7 +7,8 @@ import 'package:provider/provider.dart';
 import '../utils/custom_button.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  final Map userData;
+  const RegisterScreen({super.key, required this.userData});
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
@@ -187,8 +187,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: CustomButton(
                   text: "Send Otp",
                   function: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const MainPage()));
+                    sendPhoneNumber();
                   },
                 ),
               ),
@@ -202,7 +201,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void sendPhoneNumber() {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     String phoneNumber = phoneContoller.text.trim();
-    // in +919791340230 format
-    ap.signInWithPhone(context, "+${selectedcountry.phoneCode}$phoneNumber");
+
+    ap.signInWithPhone(
+        context: context,
+        phoneNumber: "+${selectedcountry.phoneCode}$phoneNumber",
+        userData: widget.userData);
   }
 }

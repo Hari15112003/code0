@@ -1,7 +1,16 @@
-import 'package:code0/authentication/email/email_otp_page.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:code0/utils/custom_button.dart';
+import 'package:code0/utils/image_picker.dart';
+import 'package:code0/utils/snackbar.dart';
 import 'package:code0/utils/text_form.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:email_otp/email_otp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
@@ -16,7 +25,7 @@ class _SignUpState extends State<SignUp> with RestorationMixin {
   @override
   String? get restorationId => widget.restorationId;
 
-  String dateChoosen = "Pick date";
+  String dobChoosen = "Pick date";
   final RestorableDateTime _selectedDate =
       RestorableDateTime(DateTime(1999, 7, 25));
   late final RestorableRouteFuture<DateTime?> _restorableDatePickerRouteFuture =
@@ -62,15 +71,19 @@ class _SignUpState extends State<SignUp> with RestorationMixin {
 
   void _selectDate(DateTime? newSelectedDate) {
     if (newSelectedDate != null) {
-      setState(() {
-        _selectedDate.value = newSelectedDate;
-        dateChoosen =
-            '${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}';
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              'Selected: ${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}'),
-        ));
-      });
+      setState(
+        () {
+          _selectedDate.value = newSelectedDate;
+          dobChoosen =
+              '${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}';
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'Selected: ${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}'),
+            ),
+          );
+        },
+      );
     }
   }
 
@@ -78,7 +91,7 @@ class _SignUpState extends State<SignUp> with RestorationMixin {
 
   TextEditingController aadharNumberController = TextEditingController();
 
-  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   TextEditingController addressController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -91,13 +104,19 @@ class _SignUpState extends State<SignUp> with RestorationMixin {
     'Female',
     'Others',
   ];
-
+  EmailOTP myauth = EmailOTP();
+  File? image;
   String? selectedCountry;
-  late String dropdownValue;
+  late String genderChoosen;
   @override
   void initState() {
-    dropdownValue = list.first;
+    genderChoosen = list.first;
     super.initState();
+  }
+
+  void selectedImage() async {
+    image = await pickImage(context);
+    setState(() {});
   }
 
   @override
@@ -123,29 +142,52 @@ class _SignUpState extends State<SignUp> with RestorationMixin {
               SizedBox(
                 height: height * 0.04,
               ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: CustomTextField(
-                    labelText: "Name",
-                    iconData: null,
-                    hintText: "abc",
-                    controller: nameController),
+              GestureDetector(
+                onTap: () {
+                  selectedImage();
+                },
+                child: image == null
+                    ? CircleAvatar(
+                        backgroundColor:
+                            const Color.fromARGB(255, 173, 221, 185),
+                        maxRadius: 60,
+                        child: Center(
+                          child: Image.asset('assets/images/avatar_image.png'),
+                        ),
+                      )
+                    : CircleAvatar(
+                        backgroundImage: FileImage(
+                          image!,
+                        ),
+                        radius: 50,
+                      ),
               ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: CustomTextField(
-                    labelText: "Aadhar Number",
-                    iconData: null,
-                    hintText: "5874-4365-9415",
-                    controller: aadharNumberController),
+                  labelText: "Name",
+                  iconData: null,
+                  hintText: "abc",
+                  controller: nameController,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: CustomTextField(
-                    labelText: "Phone Number",
-                    iconData: null,
-                    hintText: "9876543...",
-                    controller: phoneNumberController),
+                  labelText: "Aadhar Number",
+                  iconData: null,
+                  hintText: "5874-4365-9415",
+                  controller: aadharNumberController,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: CustomTextField(
+                  labelText: "Password",
+                  iconData: null,
+                  hintText: "9876543...",
+                  controller: passwordController,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(20),
@@ -158,10 +200,20 @@ class _SignUpState extends State<SignUp> with RestorationMixin {
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: CustomTextField(
-                    labelText: "Email Id",
-                    iconData: null,
-                    hintText: "abc@gmail.com",
-                    controller: emailController),
+                  labelText: "Email Id",
+                  iconData: null,
+                  hintText: "abc@gmail.com",
+                  controller: emailController,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: CustomTextField(
+                  labelText: "Occupation",
+                  iconData: null,
+                  hintText: "Teacher ...",
+                  controller: occupationController,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 20, top: 20, bottom: 10),
@@ -174,33 +226,37 @@ class _SignUpState extends State<SignUp> with RestorationMixin {
                         padding: const EdgeInsets.only(left: 20),
                         child: DropdownMenu<String>(
                           inputDecorationTheme: const InputDecorationTheme(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 0),
-                              border: OutlineInputBorder()),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 0),
+                            border: OutlineInputBorder(),
+                          ),
                           initialSelection: list.first,
                           label: const Text('Gender'),
                           onSelected: (String? value) {
                             setState(() {
-                              dropdownValue = value!;
+                              genderChoosen = value!;
                             });
                           },
-                          dropdownMenuEntries: list
-                              .map<DropdownMenuEntry<String>>((String value) {
-                            return DropdownMenuEntry<String>(
-                              value: value,
-                              label: value,
-                            );
-                          }).toList(),
+                          dropdownMenuEntries:
+                              list.map<DropdownMenuEntry<String>>(
+                            (String value) {
+                              return DropdownMenuEntry<String>(
+                                value: value,
+                                label: value,
+                              );
+                            },
+                          ).toList(),
                         ),
                       ),
                     ),
                     SizedBox(
                       width: 200,
                       child: CustomTextField(
-                          labelText: "Father/Husband Name",
-                          iconData: null,
-                          hintText: "abc x",
-                          controller: relationsController),
+                        labelText: "Father/Husband Name",
+                        iconData: null,
+                        hintText: "abc x",
+                        controller: relationsController,
+                      ),
                     ),
                   ],
                 ),
@@ -225,7 +281,9 @@ class _SignUpState extends State<SignUp> with RestorationMixin {
                           _restorableDatePickerRouteFuture.present();
                           setState(() {});
                         },
-                        child: Text("DOB : $dateChoosen"),
+                        child: Text(
+                          "DOB : $dobChoosen",
+                        ),
                       ),
                     ),
                   ),
@@ -310,15 +368,60 @@ class _SignUpState extends State<SignUp> with RestorationMixin {
               ),
               CustomButton(
                 text: 'Register',
-                function: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EmailOtpPage(
-                        email: emailController.text.trim(),
-                      ),
-                    ),
-                  );
+                function: () async {
+                  if (image != null) {
+                    if (nameController.text.trim().isNotEmpty &&
+                        aadharNumberController.text.trim().isNotEmpty &&
+                        passwordController.text.trim().isNotEmpty &&
+                        addressController.text.trim().isNotEmpty &&
+                        emailController.text.trim().isNotEmpty &&
+                        genderChoosen.isNotEmpty &&
+                        dobChoosen.isNotEmpty &&
+                        occupationController.text.trim().isNotEmpty) {
+                      signUp();
+                      // myauth.setConfig(
+                      //     appEmail: "sit21cs123@sairamtap.edu.in",
+                      //     appName: "Code0",
+                      //     userEmail: emailController.text.trim().toLowerCase(),
+                      //     otpLength: 4,
+                      //     otpType: OTPType.digitsOnly);
+                      // if (await myauth.sendOTP() == true) {
+                      //   showSnackBar(
+                      //     context: context,
+                      //     content: "OTP has been sent",
+                      //   );
+
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => EmailOtpPage(
+                      //       userData: {
+                      //         'aadharNo': aadharNumberController.text.trim(),
+                      //         'address': addressController.text.trim(),
+                      //         'dob': dobChoosen,
+                      //         'email':
+                      //             emailController.text.trim().toLowerCase(),
+                      //         'gender': genderChoosen,
+                      //         'name': nameController.text.trim().toLowerCase(),
+                      //         'nationality': selectedCountry,
+                      //         'notifications': allowNotifications,
+                      //         'occupation': occupationController.text.trim(),
+                      //         'password': passwordController.text.trim(),
+                      //         'file': image!,
+                      //       },
+                      //     ),
+                      //   ),
+                      // );
+                    } else {
+                      showSnackBar(
+                          context: context, content: "Enter all fields");
+                    }
+                  } else {
+                    showSnackBar(
+                      context: context,
+                      content: "Pick your Profile Photo",
+                    );
+                  }
                 },
               ),
               const Padding(
@@ -363,5 +466,53 @@ class _SignUpState extends State<SignUp> with RestorationMixin {
         ),
       ),
     );
+  }
+
+  Future<void> signUp() async {
+    try {
+      var firebaseAuth = FirebaseAuth.instance;
+      firebaseAuth
+          .createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      )
+          .whenComplete(() async {
+        await storeFileToStorage(
+                "profilePic/${firebaseAuth.currentUser!.uid}", image!)
+            .then(
+          (value) {
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(firebaseAuth.currentUser!.uid)
+                .set({
+              'aadharNo': aadharNumberController.text.trim(),
+              'address': addressController.text.trim(),
+              'dob': dobChoosen,
+              'email': emailController.text.trim().toLowerCase(),
+              'gender': genderChoosen,
+              'name': nameController.text.trim().toLowerCase(),
+              'nationality': selectedCountry,
+              'notifications': allowNotifications,
+              'occupation': occupationController.text.trim(),
+              'password': passwordController.text.trim(),
+              'file': value,
+              'uid': firebaseAuth.currentUser!.uid
+            });
+          },
+        );
+      });
+    } catch (e) {
+      showSnackBar(context: context, content: e.toString());
+
+      // Handle error, e.g., display an error message
+    }
+  }
+
+  Future<String> storeFileToStorage(String ref, File file) async {
+    UploadTask uploadTask =
+        FirebaseStorage.instance.ref().child(ref).putFile(file);
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
   }
 }

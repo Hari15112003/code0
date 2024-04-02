@@ -1,6 +1,8 @@
 import 'package:code0/map/map.dart';
 import 'package:code0/pages/home/home_page.dart';
+import 'package:code0/screens/dashboard.dart';
 import 'package:code0/screens/settings_page.dart';
+import 'package:code0/settings/account_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -50,9 +52,9 @@ class _MainPageState extends State<MainPage> {
             : selectedIndex == 1
                 ? const MapPage()
                 : selectedIndex == 2
-                    ? const SizedBox()
+                    ? const DashBoard()
                     // const HistoryPage()
-                    : const SettingsPage(),
+                    : const AccountScreen(),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(

@@ -1,4 +1,3 @@
-import 'package:code0/authentication/phone/otp_screen.dart';
 import 'package:code0/utils/custom_button.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
@@ -167,17 +166,7 @@ class _PhoneAuthenticationState extends State<PhoneAuthentication> {
               ),
               Align(
                   alignment: Alignment.center,
-                  child: CustomButton(
-                      text: 'Continue',
-                      function: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OtpScreen(
-                                      verificationId: 'verificationId',
-                                      phoneNumber: phoneController.text.trim(),
-                                    )));
-                      }))
+                  child: CustomButton(text: 'Continue', function: () {}))
             ],
           ),
         ),

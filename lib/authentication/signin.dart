@@ -1,11 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:code0/authentication/email/email_otp_page.dart';
 import 'package:code0/authentication/signup.dart';
 import 'package:code0/utils/custom_button.dart';
 import 'package:code0/utils/snackbar.dart';
 import 'package:code0/utils/text_form.dart';
 import 'package:email_otp/email_otp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -34,7 +34,10 @@ class _SignInState extends State<SignIn> {
               Image.asset('assets/images/signin.png'),
               const Text(
                 "Good to See you again",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
               const Text(
                 "Login to Continue",
@@ -51,14 +54,14 @@ class _SignInState extends State<SignIn> {
                     hintText: "123@gmail.com",
                     controller: emailController),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(20),
-              //   child: CustomTextField(
-              //       labelText: "Otp",
-              //       iconData: Icons.remove_red_eye,
-              //       hintText: "123...",
-              //       controller: passwordController),
-              // ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: CustomTextField(
+                    labelText: "Otp",
+                    iconData: Icons.remove_red_eye,
+                    hintText: "123...",
+                    controller: passwordController),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -95,27 +98,42 @@ class _SignInState extends State<SignIn> {
                 height: height * 0.03,
               ),
               CustomButton(
-                text: "Send Otp",
+                text: "Sign in",
                 function: () async {
-                  myauth.setConfig(
-                      appEmail: "sit21cs123@sairamtap.edu.in",
-                      appName: "Code0",
-                      userEmail: emailController.text.trim(),
-                      otpLength: 4,
-                      otpType: OTPType.digitsOnly);
-                  if (await myauth.sendOTP() == true) {
-                    showSnackBar(context, "OTP has been sent");
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EmailOtpPage(
-                          email: emailController.text.trim(),
-                        ),
-                      ),
+                  if (emailController.text.trim().isNotEmpty &&
+                      passwordController.text.trim().isNotEmpty) {
+                    signIn(
+                      emailController: emailController,
+                      passwordController: passwordController,
                     );
-                  } else {
-                    showSnackBar(context, 'Oops, OTP send failed');
                   }
+                  //   myauth.setConfig(
+                  //       appEmail: "sit21cs123@sairamtap.edu.in",
+                  //       appName: "Code0",
+                  //       userEmail: emailController.text.trim(),
+                  //       otpLength: 4,
+                  //       otpType: OTPType.digitsOnly);
+                  //   if (await myauth.sendOTP() == true) {
+                  //     showSnackBar(
+                  //       context: context,
+                  //       content: "OTP has been sent",
+                  //     );
+                  //     Navigator.pushReplacement(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => EmailOtpPage(
+                  //           userData: {
+                  //             'email': emailController.text.trim().toLowerCase()
+                  //           },
+                  //         ),
+                  //       ),
+                  //     );
+                  //   } else {
+                  //     showSnackBar(
+                  //       context: context,
+                  //       content: 'Oops, OTP send failed',
+                  //     );
+                  //   }
                 },
               ),
               SizedBox(
@@ -147,8 +165,12 @@ class _SignInState extends State<SignIn> {
               CustomButton(
                 text: "Create account",
                 function: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const SignUp()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignUp(),
+                    ),
+                  );
                 },
               )
             ],
@@ -156,5 +178,21 @@ class _SignInState extends State<SignIn> {
         ),
       ),
     );
+  }
+
+  Future<void> signIn(
+      {required TextEditingController emailController,
+      required TextEditingController passwordController}) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+    } catch (e) {
+      showSnackBar(
+        context: context,
+        content: e.toString(),
+      );
+    }
   }
 }

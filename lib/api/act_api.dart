@@ -4,14 +4,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> fetchPrediction(String incident) async {
-  const url = 'http://192.168.0.113:50162/predict';
+  const url = 'http://192.168.21.112:50161/predict';
   final response = await http.post(
     Uri.parse(url),
     headers: {'Content-Type': 'application/json'},
     body: jsonEncode({'incident': incident}),
   );
   if (response.statusCode == 200) {
-
     return jsonDecode(response.body);
   } else {
     throw Exception('Failed to load prediction');
@@ -24,5 +23,6 @@ void call({required String incident}) async {
     String des = response['description'];
     print({predictedSection, des});
   }).catchError((error) {
+    print("Error");
   });
 }

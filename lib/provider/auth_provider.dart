@@ -46,17 +46,22 @@ class AuthProvider extends ChangeNotifier {
 
   // signin using otp
   void signInWithPhone(
-    BuildContext context,
-    String phoneNumber,
-  ) async {
+      {required BuildContext context,
+      required String phoneNumber,
+      required Map userData}) async {
     try {
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
-          await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+          await _firebaseAuth
+              .signInWithCredential(phoneAuthCredential)
+              .then((value) => userData['uid'] = value.user!.uid);
         },
         verificationFailed: (error) {
-          showSnackBar(context, error.message.toString());
+          showSnackBar(
+            context: context,
+            content: error.message.toString(),
+          );
           throw Exception(error.message);
         },
         codeSent: (verificationId, forceResendingToken) {
@@ -66,6 +71,7 @@ class AuthProvider extends ChangeNotifier {
               builder: (context) => OtpScreen(
                 verificationId: verificationId,
                 phoneNumber: phoneNumber,
+                userData: userData,
               ),
             ),
           );
@@ -75,16 +81,17 @@ class AuthProvider extends ChangeNotifier {
         forceResendingToken: null,
       );
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
+      showSnackBar(context: context, content: e.message.toString());
     }
   }
 
 //resend otp
-  void resendVerificationCode(
-    String phoneNumber,
-    String verificationId,
-    BuildContext context,
-  ) async {
+  void resendVerificationCode({
+    required String phoneNumber,
+    required String verificationId,
+    required BuildContext context,
+    required Map userData,
+  }) async {
     try {
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
@@ -92,7 +99,7 @@ class AuthProvider extends ChangeNotifier {
           await _firebaseAuth.signInWithCredential(phoneAuthCredential);
         },
         verificationFailed: (error) {
-          showSnackBar(context, error.message.toString());
+          showSnackBar(context: context, content: error.message.toString());
           throw Exception(error.message);
         },
         codeSent: (newVerificationId, forceResendingToken) {
@@ -105,6 +112,7 @@ class AuthProvider extends ChangeNotifier {
               builder: (context) => OtpScreen(
                 verificationId: verificationId,
                 phoneNumber: phoneNumber,
+                userData: userData,
               ),
             ),
           );
@@ -114,7 +122,7 @@ class AuthProvider extends ChangeNotifier {
         forceResendingToken: null,
       );
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
+      showSnackBar(context: context, content: e.message.toString());
     }
   }
 
@@ -142,7 +150,7 @@ class AuthProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
+      showSnackBar(context: context, content: e.message.toString());
       _isLoading = false;
       notifyListeners();
     }
@@ -166,7 +174,7 @@ class AuthProvider extends ChangeNotifier {
 //user save to firebase
   void saveUserDataToFirebase({
     required BuildContext context,
-    required UserModel userModel,
+    required Map userData,
     required Function onSuccess,
   }) async {
     _isLoading = true;
@@ -174,24 +182,23 @@ class AuthProvider extends ChangeNotifier {
     try {
       // uploading image to firebase storage.
 
-      userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
-      userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
-      userModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
-
-      _userModel = userModel;
-
-      // uploading to database
+      userData['createdAt'] = DateTime.now().millisecondsSinceEpoch.toString();
+      userData['file'] = "";
       await _firebaseFirestore
           .collection("users")
-          .doc(_uid)
-          .set(userModel.toMap())
+          .doc(userData['uid'])
+          .set(Map<String, dynamic>.from(userData))
           .then((value) {
         onSuccess();
         _isLoading = false;
         notifyListeners();
+      }).then((value) {
+        // File image = userData['file'];
+
+        // storeFileToStorage("profilePic/${userData['uid']}", image);
       });
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
+      showSnackBar(context: context, content: e.message.toString());
       _isLoading = false;
       notifyListeners();
     }
@@ -225,7 +232,7 @@ class AuthProvider extends ChangeNotifier {
           notifyListeners();
         });
       } on FirebaseAuthException catch (e) {
-        showSnackBar(context, e.message.toString());
+        showSnackBar(context: context, content: e.message.toString());
         _isLoading = false;
         notifyListeners();
       }

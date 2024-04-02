@@ -11,11 +11,13 @@ import '../../utils/snackbar.dart';
 class OtpScreen extends StatefulWidget {
   final String verificationId;
   final String phoneNumber;
+  final Map userData;
 
   const OtpScreen({
     Key? key,
     required this.verificationId,
     required this.phoneNumber,
+    required this.userData,
   }) : super(key: key);
 
   @override
@@ -166,12 +168,14 @@ class _OtpScreenState extends State<OtpScreen> {
                   onTap: () {
                     _timerDuration == 0
                         ? ap.resendVerificationCode(
-                            widget.phoneNumber,
-                            widget.verificationId,
-                            context,
-                          )
-                        : showSnackBar(context,
-                            'Wait for sometime until the time is over');
+                            phoneNumber: widget.phoneNumber,
+                            verificationId: widget.verificationId,
+                            context: context,
+                            userData: widget.userData)
+                        : showSnackBar(
+                            context: context,
+                            content:
+                                'Wait for sometime until the time is over');
                     // ignore: avoid_print
                     print("Otp resended");
                   },
@@ -180,7 +184,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     text: 'Submit',
                     function: () {
                       if (otpCode != null) {
-                        // verifyOtp(context, otpCode!);
+                        verifyOtp(context, otpCode!);
                       }
                     })
               ],
@@ -191,20 +195,18 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  // void verifyOtp(BuildContext context, String userOtp) {
-  //   final ap = Provider.of<AuthProvider>(context, listen: false);
+  void verifyOtp(BuildContext context, String userOtp) {
+    final ap = Provider.of<AuthProvider>(context, listen: false);
 
-  //   ap.saveUserDataToFirebase(
-  //       context: context,
-  //       userModel: userModel,
-  //       onSuccess: () {
-  //         // once data is saved  we store locally
-  //         ap.saveUserDataToSP().then(
-  //           (value) {
-  //             ap.setSignIn();
-  //             print("Success");
-  //           },
-  //         );
-  //       });
-  // }
+    ap.saveUserDataToFirebase(
+        context: context,
+        userData: widget.userData,
+        onSuccess: () {
+          ap.saveUserDataToSP().then(
+            (value) {
+              ap.setSignIn();
+            },
+          );
+        });
+  }
 }

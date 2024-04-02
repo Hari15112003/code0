@@ -1,11 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:code0/authentication/registerscreen.dart';
 import 'package:code0/utils/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
 class EmailOtpPage extends StatefulWidget {
-  final String email;
-  const EmailOtpPage({super.key, required this.email});
+  final Map userData;
+  const EmailOtpPage({super.key, required this.userData});
 
   @override
   State<EmailOtpPage> createState() => _EmailOtpPageState();
@@ -55,7 +57,7 @@ class _EmailOtpPageState extends State<EmailOtpPage> {
                 textAlign: TextAlign.center,
               ),
               Text(
-                widget.email,
+                widget.userData['email'],
                 style: const TextStyle(
                   fontSize: 14,
                   color: Colors.black38,
@@ -103,13 +105,17 @@ class _EmailOtpPageState extends State<EmailOtpPage> {
               ),
               CustomButton(
                 text: "Proceed",
-                function: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const RegisterScreen(),
-                    ),
-                  );
+                function: () async {
+                 
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegisterScreen(
+                          userData: widget.userData,
+                        ),
+                      ),
+                    );
+                  
                 },
               )
             ],

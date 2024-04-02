@@ -14,13 +14,17 @@ class CaseHistory extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              const TopButton(text: "Compliant History"),
+              const TopButton(
+                text: "Compliant History",
+              ),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CaseStatus()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CaseStatus(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: double.infinity,

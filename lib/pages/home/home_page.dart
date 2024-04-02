@@ -1,9 +1,12 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:code0/api/act_api.dart';
 import 'package:code0/pages/home/cases/case_history.dart';
 import 'package:code0/pages/home/emergency/emergency_alert.dart';
 import 'package:code0/pages/home/news/news_page.dart';
+import 'package:code0/pages/home/notifications/notification.dart';
 import 'package:code0/pages/home/volunteer/volunteer_availabity.dart';
-import 'package:code0/pages/report/file_case.dart';
+import 'package:code0/pages/case_filling/file_case.dart';
+import 'package:code0/static/know_your_laws.dart';
 import 'package:flutter/material.dart';
 
 import 'news/services/api_service.dart';
@@ -28,6 +31,8 @@ class _HomePageState extends State<HomePage> {
   String status = "In Progress";
   String updatedOn = "22/11/2023";
   String crimeType = "Theft";
+  int current = 0;
+  final CarouselController controller = CarouselController();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -40,13 +45,59 @@ class _HomePageState extends State<HomePage> {
             Align(
               alignment: Alignment.topRight,
               child: IconButton(
-                icon: const Icon(Icons.notifications_rounded),
-                onPressed: () {},
+                icon: const Icon(
+                  Icons.notifications_rounded,
+                  size: 28,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NotificationScreen()));
+                },
               ),
             ),
             headText(text: "Safe Zone"),
-            const SizedBox(
+            SizedBox(
               height: 200,
+              child: CarouselSlider(
+                  carouselController: controller,
+                  options: CarouselOptions(
+                    height: 400,
+                    // aspectRatio: 16 / 9,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        current = index;
+                      });
+                    },
+                    viewportFraction: 0.8,
+                    initialPage: 0,
+                    enableInfiniteScroll: true,
+                    reverse: false,
+                    // autoPlay: true,
+                    autoPlayInterval: const Duration(seconds: 3),
+                    autoPlayAnimationDuration:
+                        const Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enlargeCenterPage: true,
+                    enlargeFactor: 0.3,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                  items: [
+                    Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(10),
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xff92A3FD), Color(0xff9DCEFF)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                    ),
+                  ]),
             ),
             ElevatedButton(
               onPressed: () {
@@ -116,10 +167,10 @@ class _HomePageState extends State<HomePage> {
                                   icon: Icons.sos,
                                   color:
                                       const Color.fromARGB(255, 122, 211, 27),
-                                  text: "Prevention \n     Tips",
-                                  navigatorWidget: const SizedBox()),
+                                  text: "Know Your \n     Laws",
+                                  navigatorWidget: const KnowYourLaws()),
                               const SizedBox(
-                                height: 20,
+                                height: 16,
                               ),
                               helperLinks(
                                   icon: Icons.contact_emergency_rounded,
@@ -171,87 +222,6 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-
-            // Padding(
-            //   padding: const EdgeInsets.all(20),
-            //   child: Container(
-            //     height: height * 0.16,
-            //     padding: const EdgeInsets.all(20),
-            //     decoration: BoxDecoration(
-            //         color: Colors.blue.withOpacity(0.2),
-            //         borderRadius: BorderRadius.circular(20)),
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.start,
-            //       children: [
-            //         SizedBox(
-            //           width: 100,
-            //           child: SfRadialGauge(
-            //             enableLoadingAnimation: true,
-            //             axes: <RadialAxis>[
-            //               RadialAxis(
-            //                 isInversed: true,
-            //                 showTicks: false,
-            //                 showFirstLabel: false,
-            //                 startAngle: 0,
-            //                 endAngle: 360,
-            //                 maximumLabels: 0,
-            //                 pointers: <GaugePointer>[
-            //                   RangePointer(
-            //                       value: complaintProgress,
-            //                       cornerStyle: CornerStyle.bothCurve,
-            //                       width: 0.2,
-            //                       color: Colors.blue,
-            //                       sizeUnit: GaugeSizeUnit.factor)
-            //                 ],
-            //                 annotations: <GaugeAnnotation>[
-            //                   GaugeAnnotation(
-            //                     horizontalAlignment: GaugeAlignment.center,
-            //                     positionFactor: 0.1,
-            //                     widget: Text(
-            //                       "${complaintProgress.toInt()} %",
-            //                       style: const TextStyle(
-            //                           fontSize: 20.0,
-            //                           fontWeight: FontWeight.bold),
-            //                     ),
-            //                   ),
-            //                 ],
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //         Column(
-            //           crossAxisAlignment: CrossAxisAlignment.start,
-            //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //           children: [
-            //             Padding(
-            //               padding: const EdgeInsets.symmetric(horizontal: 10),
-            //               child: Text(
-            //                 crimeType,
-            //                 style: const TextStyle(
-            //                     fontSize: 22, fontWeight: FontWeight.w800),
-            //               ),
-            //             ),
-            //             Padding(
-            //               padding: const EdgeInsets.symmetric(horizontal: 10),
-            //               child: Text(
-            //                 status,
-            //                 style: const TextStyle(
-            //                     fontSize: 16, fontWeight: FontWeight.w600),
-            //               ),
-            //             ),
-            //             Padding(
-            //               padding: const EdgeInsets.symmetric(horizontal: 10),
-            //               child: Text(
-            //                 "Updated on $updatedOn",
-            //                 style: const TextStyle(fontWeight: FontWeight.w500),
-            //               ),
-            //             ),
-            //           ],
-            //         )
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

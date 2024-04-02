@@ -2,17 +2,19 @@
 
 import 'dart:math';
 
+import 'package:code0/authentication/auth_wrapper.dart';
+import 'package:code0/authentication/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 
-class WithBuilder extends StatefulWidget {
-  const WithBuilder({super.key});
+class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
 
   @override
-  _WithBuilder createState() => _WithBuilder();
+  _OnboardingScreen createState() => _OnboardingScreen();
 }
 
-class _WithBuilder extends State<WithBuilder> {
+class _OnboardingScreen extends State<OnboardingScreen> {
   int page = 0;
   late LiquidController liquidController;
 
@@ -68,135 +70,140 @@ class _WithBuilder extends State<WithBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: <Widget>[
-            LiquidSwipe.builder(
-              itemCount: splashData.length,
-              itemBuilder: (context, index) {
-                return SizedBox(
-                  width: double.infinity - 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SizedBox(
-                            height: 100,
-                          ),
-                          Visibility(
-                            visible: index == page,
-                            child: Text(
-                              splashData[index]['title']!,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontFamily: "Sofia",
-                                fontSize: 27,
-                                fontWeight: FontWeight.w800,
-                                color: Color(0xFF424242),
-                              ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: <Widget>[
+          LiquidSwipe.builder(
+            initialPage: 0,
+            itemCount: splashData.length,
+            itemBuilder: (context, index) {
+              return SizedBox(
+                width: double.infinity - 300,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(
+                          height: 100,
+                        ),
+                        Visibility(
+                          visible: index == page,
+                          child: Text(
+                            splashData[index]['title']!,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontFamily: "Sofia",
+                              fontSize: 27,
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xFF424242),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Visibility(
-                            visible: index == page,
-                            child: Text(
-                              splashData[index]['subtitle']!,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: "Sofia",
-                                fontSize: 15,
-                                color: Colors.grey[600],
-                                height: 1.5,
-                              ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Visibility(
+                          visible: index == page,
+                          child: Text(
+                            splashData[index]['subtitle']!,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: "Sofia",
+                              fontSize: 15,
+                              color: Colors.grey[600],
+                              height: 1.5,
                             ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 150,
-                      ),
-                      Image.asset(
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 100,
+                    ),
+                    Visibility(
+                      visible: index == page,
+                      child: Image.asset(
                         splashData[index]['image']!,
                         height: 300,
-                        // color: Colors.amber,
                         fit: BoxFit.contain,
                       ),
-                      // index == 4
-                      //     ? const Padding(
-                      //         padding: EdgeInsets.symmetric(horizontal: 70.0),
-                      //         child: Hello(),
-                      //       )
-                      //     : const SizedBox.shrink(),
-                    ],
-                  ),
-                );
-              },
-              positionSlideIcon: 0.8,
-              onPageChangeCallback: pageChangeCallback,
-              waveType: WaveType.liquidReveal,
-              liquidController: liquidController,
-              fullTransitionValue: 880,
-              enableSideReveal: true,
-              preferDragFromRevealedArea: true,
-              ignoreUserGestureWhileAnimating: true,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: <Widget>[
-                  const Expanded(child: SizedBox()),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children:
-                        List<Widget>.generate(splashData.length, _buildDot),
-                  ),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: TextButton(
-                  onPressed: () {
-                    liquidController.animateToPage(
-                        page: splashData.length - 1, duration: 700);
-                  },
-                  style: TextButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.01),
-                      foregroundColor: Colors.black),
-                  child: const Text("Skip to End"),
+                    ),
+                    index == 4
+                        ? const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 70.0),
+                            child: SignIn())
+                        : const SizedBox.shrink(),
+                  ],
                 ),
+              );
+            },
+            positionSlideIcon: 0.8,
+            onPageChangeCallback: pageChangeCallback,
+            waveType: WaveType.liquidReveal,
+            liquidController: liquidController,
+            fullTransitionValue: 880,
+            enableSideReveal: true,
+            preferDragFromRevealedArea: true,
+            ignoreUserGestureWhileAnimating: true,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: <Widget>[
+                const Expanded(child: SizedBox()),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List<Widget>.generate(splashData.length, _buildDot),
+                ),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: TextButton(
+                onPressed: () {
+                  liquidController.animateToPage(
+                      page: splashData.length - 1, duration: 700);
+                },
+                style: TextButton.styleFrom(
+                    backgroundColor: Colors.white.withOpacity(0.01),
+                    foregroundColor: Colors.black),
+                child: const Text("Skip to End"),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: TextButton(
-                  onPressed: () {
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: TextButton(
+                onPressed: () {
+                  if (liquidController.currentPage < splashData.length - 1) {
                     liquidController.jumpToPage(
-                        page: liquidController.currentPage + 1 >
-                                splashData.length - 1
-                            ? 0
-                            : liquidController.currentPage + 1);
-                  },
-                  style: TextButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.01),
-                      foregroundColor: Colors.black),
-                  child: const Text("Next"),
-                ),
+                        page: liquidController.currentPage + 1);
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AuthWrapper(),
+                      ),
+                    );
+                  }
+                },
+                style: TextButton.styleFrom(
+                    backgroundColor: Colors.white.withOpacity(0.01),
+                    foregroundColor: Colors.black),
+                child: const Text("Next"),
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
