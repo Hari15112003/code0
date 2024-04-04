@@ -1,20 +1,16 @@
+// ignore_for_file: avoid_print
+
+import 'package:code0/api/act_api.dart';
+import 'package:code0/form_generator/form_pdf.dart';
 import 'package:code0/pages/home/cases/custom_stepper.dart';
 import 'package:code0/utils/top_button.dart';
 import 'package:flutter/material.dart';
 
 class CaseStatus extends StatelessWidget {
-  const CaseStatus({super.key});
+  final List<CustomStep> steps;
+  final Map data;
+  const CaseStatus({super.key, required this.steps, required this.data});
 
-  static List<CustomStep> steps = [
-    CustomStep(DateTime(2021, 8, 9, 9, 30).millisecondsSinceEpoch, "Applied",
-        "Your case has been filed successfully"),
-    CustomStep(DateTime(2021, 8, 9, 9, 35).millisecondsSinceEpoch, "Accepted",
-        "Your case has been accepted at this Police station"),
-    CustomStep(DateTime(2021, 8, 9, 9, 55).millisecondsSinceEpoch, "Verified",
-        "Your case details is Verified Successfully and Fir No: is generated"),
-    const CustomStep(0, "Action", "Action is taken Successfully for your Case"),
-    const CustomStep(0, "Closed", "Case with Fir No: Closed Sucessfully"),
-  ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -40,7 +36,36 @@ class CaseStatus extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              CustomStepper(steps: steps),
+              CustomStepper(
+                steps: steps,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  var response = await fetchPrediction(data['incident']);
+                  String predictedSection = response['predicted_section'];
+                  String des = response['description'];
+                  print(predictedSection);
+                  print(data);
+                  print(des);
+                  generatePdf(
+                    act: des,
+                    section: predictedSection,
+                    dateFrom: "03/04/2023",
+                    dateTo: "03/04/2023",
+                    place: data['city'],
+                    datePosted: data['datePosted'],
+                    timeFrom: data['timeFrom'],
+                    timePosted: data['timePosted'],
+                    timeTo: data['timeTo'],
+                    description: data['description'],
+                    fatherName: 'M Ravi',
+                  );
+                },
+                child: const Text("Generate report"),
+              )
             ],
           ),
         ),

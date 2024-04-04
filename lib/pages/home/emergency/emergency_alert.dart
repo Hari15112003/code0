@@ -44,7 +44,7 @@ class EmergencyAlert extends StatelessWidget {
                       var downloadsPath =
                           await AndroidPathProvider.downloadsPath;
 
-                      SOS().sharePhotoToWhatsApp("9791340230",
+                      SOS().sharePhotoToWhatsApp("9790867582",
                           "http://file:/$downloadsPath/digambar.jpeg");
                     },
                     child: Ink.image(
@@ -77,14 +77,14 @@ class EmergencyAlert extends StatelessWidget {
                     child: CustomButton(
                         text: "Police",
                         function: () {
-                          _callNumber("9791340230");
+                          _callNumber("9790867582");
                         }),
                   ),
                   SizedBox(
                     width: 150,
                     child: CustomButton(
                       function: () {
-                        _callNumber("9791340230");
+                        _callNumber("9790867582");
                       },
                       text: 'Emergency',
                     ),

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> fetchPrediction(String incident) async {
-  const url = 'http://192.168.21.112:50161/predict';
+  const url = 'http://192.168.137.196:50161/predict';
   final response = await http.post(
     Uri.parse(url),
     headers: {'Content-Type': 'application/json'},

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:code0/authentication/signup.dart';
+import 'package:code0/onboarding/splash.dart';
 import 'package:code0/utils/custom_button.dart';
 import 'package:code0/utils/snackbar.dart';
 import 'package:code0/utils/text_form.dart';
@@ -57,7 +58,7 @@ class _SignInState extends State<SignIn> {
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: CustomTextField(
-                    labelText: "Otp",
+                    labelText: "Password",
                     iconData: Icons.remove_red_eye,
                     hintText: "123...",
                     controller: passwordController),
@@ -184,10 +185,19 @@ class _SignInState extends State<SignIn> {
       {required TextEditingController emailController,
       required TextEditingController passwordController}) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text,
+          )
+          .then(
+            (value) => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SplashScreen(),
+              ),
+            ),
+          );
     } catch (e) {
       showSnackBar(
         context: context,

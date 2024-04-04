@@ -1,5 +1,4 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:code0/api/act_api.dart';
 import 'package:code0/pages/home/cases/case_history.dart';
 import 'package:code0/pages/home/emergency/emergency_alert.dart';
 import 'package:code0/pages/home/news/news_page.dart';
@@ -148,11 +147,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ]),
             ),
-            ElevatedButton(
-              onPressed: () {
-                call(incident: 'Theft');
-              },
-              child: const Text("Call Api"),
+            const SizedBox(
+              height: 20,
             ),
             headText(text: "Complaint Status"),
             Container(
@@ -261,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                               icon: Icons.notification_important,
                               color: const Color.fromARGB(255, 62, 7, 245),
                               text: "  Emergency\n Notification",
-                              navigatorWidget: const SizedBox(),
+                              navigatorWidget: const NotificationScreen(),
                             ),
                           ],
                         ),

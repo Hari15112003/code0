@@ -37,6 +37,8 @@ class VolunteerAvailability extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 35,
+                          backgroundImage:
+                              AssetImage("assets/images/avatar_image.png"),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

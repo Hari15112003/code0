@@ -28,8 +28,8 @@ class _ExpandileExamplePageState extends State<ExpandileExamplePage> {
     return Expandile(
       primaryColor: primaryColor,
       leading: _leading(),
-      title: 'Date: ${widget.date}',
-      description: 'Cancel Your Order at any time',
+      title: 'Date: ${DateTime.now().toString()}',
+      description: 'Case Alert',
       maxDescriptionLines: 1,
       footer: Column(
         children: [
@@ -96,8 +96,8 @@ class _ExpandileExamplePageState extends State<ExpandileExamplePage> {
   Widget shareButton() {
     return Expanded(
         child: Button(
-      text: 'Cancel All Orders',
-      processingText: 'Canceling...',
+      text: 'Clear',
+      processingText: 'Clearing...',
       textColor: primaryColor,
       buttonColor: primaryColor.withOpacity(0.1),
       onPressed: shareFn,
@@ -105,9 +105,9 @@ class _ExpandileExamplePageState extends State<ExpandileExamplePage> {
   }
 
   Widget buyButton({required String totalOrders}) {
-    return Expanded(
+    return const Expanded(
       child: Button(
-        text: 'Total Orders Count:$totalOrders',
+        text: 'Time 10:02 AM',
         buttonColor: primaryColor,
       ),
     );

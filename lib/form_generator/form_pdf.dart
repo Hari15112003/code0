@@ -15,19 +15,30 @@ class _PdfGeneratorState extends State<PdfGenerator> {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-            onPressed: () {
-              generatePdf();
-            },
-            child: const Text("Pdf")),
+          onPressed: () {
+            // generatePdf();
+          },
+          child: const Text("Pdf"),
+        ),
       ),
     );
   }
 }
 
-Future<void> generatePdf() async {
- 
+Future<void> generatePdf({
+  required String act,
+  required String section,
+  required String dateFrom,
+  required String dateTo,
+  required String place,
+  required String timeFrom,
+  required String timeTo,
+  required String description,
+  required String datePosted,
+  required String timePosted,
+  required String fatherName,
+}) async {
   PdfDocument document = PdfDocument();
-
 
   PdfPage page = document.pages.add();
 
@@ -62,7 +73,7 @@ Future<void> generatePdf() async {
   );
 
   page.graphics.drawString(
-    '${'1. District :'.padRight(35)}${'PS:'.padRight(35)}${'Year:'.padRight(35)}Fir No:',
+    '${'1. District : Kanchipuram '.padRight(35)}${'PS: Kanchipura Police Station '.padRight(35)}${'Year:'.padRight(35)} 2024  Fir No: 002',
     font,
     bounds: Rect.fromLTWH(x1, y, 500, 20),
     format: fieldFormat,
@@ -71,7 +82,7 @@ Future<void> generatePdf() async {
   y += 30;
 
   page.graphics.drawString(
-    '${'2. (i) Act:'.padRight(70)}${'Sections:'.padRight(75)}${'\n   (ii) Act:'.padRight(75)}${'Sections:'.padRight(75)}${'\n   (iii) Act:'.padRight(75)}${'Sections:'.padRight(75)}\n   (iv) Other Acts & Sections:',
+    '${'2. (i) Act:'.padRight(5)}${act.padRight(25)} ${'Sections:'.padLeft(5)}${section.padRight(25)}${'\n   (ii) Act:'.padRight(75)}${'Sections:'.padRight(75)}${'\n   (iii) Act:'.padRight(75)}${'Sections:'.padRight(75)}\n   (iv) Other Acts & Sections:',
     font,
     bounds: Rect.fromLTWH(x1, y, 500, 80),
     format: fieldFormat,
@@ -79,16 +90,7 @@ Future<void> generatePdf() async {
 
   y += 100;
   page.graphics.drawString(
-    '3. (a) Occurrence of Offence Day:'.padRight(70) +
-        'Date from:'.padRight(30) +
-        'Date to:'.padRight(30) +
-        '\n    Time Period:'.padRight(50) +
-        'Time from:'.padRight(50) +
-        'Time to:'.padRight(50) +
-        '\n   (b) Information Received at PS. Date:'.padRight(75) +
-        'Time:'.padRight(50) +
-        '\n   (c) General Diary Reference: Entry No(s)'.padRight(65) +
-        'Time:'.padRight(50),
+    '${'3. (a) Occurrence of Offence Day:'.padRight(70)}${'Date from:'.padRight(4)}${dateFrom.padRight(50)}${'Date to:'.padRight(30)}    $dateTo  ${'\n    Time Period:'.padRight(20)} ${'Time from:'.padRight(50)} $timeFrom    ${'Time to:'.padRight(50)} $timeTo        ${'\n   (b) Information Received at PS. Date:'.padRight(75)}  $datePosted ${'Time:'.padRight(50)}  $timePosted   ${'\n   (c) General Diary Reference: Entry No(s)'.padRight(65)}${'Time:'.padRight(50)}',
     font,
     bounds: Rect.fromLTWH(x1, y, 500, 100),
     format: fieldFormat,
@@ -97,7 +99,7 @@ Future<void> generatePdf() async {
   y += 120;
 
   page.graphics.drawString(
-    '4. Type of Information: Written/Oral:',
+    '4. Type of Information: Written/Oral: \n    $description',
     font,
     bounds: Rect.fromLTWH(x1, y, 500, 20),
     format: fieldFormat,
@@ -165,7 +167,7 @@ Future<void> generatePdf() async {
   );
 
   y += 30;
-  
+
   page1.graphics.drawString(
     '13. Action taken : Since the above report reveals commission of offence(s) u/s as mentioned at item No.2 registered the case\nand took up the investigation / directed ........................... Rank........................... to take up the Investigation / Refused\nInvestigation / transferred to PS.............................................................on point of jurisdiction.',
     font,

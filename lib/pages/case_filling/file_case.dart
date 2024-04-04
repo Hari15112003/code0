@@ -491,7 +491,31 @@ class _StepperExampleState extends State<StepperExample> with RestorationMixin {
           .collection(date)
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .set({
-            time: {
+        time: {
+          "incident": incidentValue,
+          "country": countryValue,
+          "state": stateValue,
+          "city": cityValue,
+          "area": areaController.text.trim(),
+          "dressCode": dressCodeController.text.trim(),
+          "weapon": weaponController.text.trim(),
+          "timeFrom": "${timeFrom.hour}:${timeTo.minute}",
+          "timeTo": "${timeTo.hour}:${timeTo.minute}",
+          "dateFrom": fromDate,
+          "dateTo": toDate,
+          "gender": genderValue,
+          "description": descriptionController.text.trim(),
+          "timePosted": time,
+          "datePosted": date,
+          "status": "Applied"
+        },
+      }, SetOptions(merge: true)).then((value) {
+        FirebaseFirestore.instance
+            .collection("policeCases")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({
+          "cases": FieldValue.arrayUnion([
+            {
               "incident": incidentValue,
               "country": countryValue,
               "state": stateValue,
@@ -505,12 +529,14 @@ class _StepperExampleState extends State<StepperExample> with RestorationMixin {
               "dateTo": toDate,
               "gender": genderValue,
               "description": descriptionController.text.trim(),
-            },
-          })
-          .then((value) => showSnackBar(
-              context: context, content: "File registered Successfully"))
-          .onError((error, stackTrace) => print(error));
-      print("Error");
+              "timePosted": time,
+              "datePosted": date,
+              "status": "Applied"
+            }
+          ])
+        }, SetOptions(merge: true));
+        showSnackBar(context: context, content: "File registered Successfully");
+      });
     } else {
       showSnackBar(context: context, content: "Enter all Fields");
     }

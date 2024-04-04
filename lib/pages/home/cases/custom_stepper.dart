@@ -67,12 +67,13 @@ class _CustomStepperState extends State<CustomStepper> {
 
   Widget timeWidgets() {
     return ListView.builder(
-        itemCount: widget.steps.length,
-        itemBuilder: (context, int index) {
-          CustomStep step = widget.steps[index];
-          String time = step.createdAt == 0 ? "" : "78/67/90";
-          return timeWidget(time);
-        });
+      itemCount: widget.steps.length,
+      itemBuilder: (context, int index) {
+        CustomStep step = widget.steps[index];
+        String time = step.createdAt == 0 ? "" : "78/67/90";
+        return timeWidget(time);
+      },
+    );
   }
 
   Widget timeWidget(String time) {
